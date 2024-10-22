@@ -1175,12 +1175,20 @@ CONTAINS
    !LOCALS
    INTEGER :: lev,zon,av,sv,sd
    TYPE(aed_variable_t),POINTER :: tvar
+   INTEGER, ALLOCATABLE :: layer_map(:)
    !
    !----------------------------------------------------------------------------
    !BEGIN
       DO lev=1, wlev
          CALL aed_initialize(column, lev)
       ENDDO
+
+      !Initialize column
+      ALLOCATE(layer_map(wlev))
+      DO lev=1,wlev
+         layer_map(lev) = 1 + wlev-lev
+      ENDDO
+      CALL aed_initialize_column(column, layer_map)
 
       !# (1) BENTHIC INITIALISATION
       IF ( benthic_mode .GT. 1 ) THEN
