@@ -981,14 +981,14 @@ for (i = 0; i < n_zones; i++) {
             fprintf(stderr, "     No 'inflow' config, assuming no inflows\n");
         else {
             if ( num_inflows > MaxInf )
-                fprintf(stderr, "     Too many inflows specified in inflow config %d > %d\n", num_inflows, MaxInf);
+                fprintf(stderr, "     Too many inflows specified in inflow configxx %d > %d\n", num_inflows, MaxInf);
             else
                 fprintf(stderr, "     Unknown ERROR in inflow config\n");
             exit(1);
         }
     } else {
         if ( num_inflows > MaxInf ) {
-            fprintf(stderr, "     ERROR: Too many inflows specified in 'inflow' config %d > %d\n", num_inflows, MaxInf);
+            fprintf(stderr, "     ERROR: Too many inflows specified in 'inflow' configxx %d > %d\n", num_inflows, MaxInf);
             exit(1);
         }
         NumInf = num_inflows;
