@@ -60,6 +60,7 @@ MODULE glm_aed
    USE aed_common
    USE glm_types
    USE glm_zones
+   USE aed_oxygen, ONLY: oxy_flux_wcol
 #ifdef HAVE_IEEE_ARITH
    USE IEEE_ARITHMETIC
 #endif
@@ -67,6 +68,8 @@ MODULE glm_aed
    IMPLICIT NONE
 
    PRIVATE ! By default, make everything private
+
+   PUBLIC oxy_flux_wcol
 !
 #include "glm_globals.h"
 #include "glm_plot.h"
@@ -1438,6 +1441,8 @@ CONTAINS
    DO lev=1,wlev
       CALL aed_calculate(column, lev)
    ENDDO
+   ! oxy_flux_wcol = _FLUX_VAR_(data_)
+   print *, "oxy_flux_wcol", oxy_flux_wcol
 
    DEALLOCATE(flux_pel_pre)
    END SUBROUTINE calculate_fluxes
