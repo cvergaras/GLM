@@ -144,6 +144,7 @@ MODULE glm_aed
    AED_REAL,POINTER :: precip, evap, bottom_stress, air_temp, rel_hum
    AED_REAL,POINTER :: I_0, wnd, air_pres
    AED_REAL,ALLOCATABLE,DIMENSION(:),TARGET :: depth
+   AED_REAL,TARGET :: col_depth
 
    AED_REAL,POINTER :: lon, lat
    AED_REAL,POINTER :: yeardayP, timestepP
@@ -815,7 +816,7 @@ SUBROUTINE define_column(column, top, cc, cc_diag, flux_pel, flux_atm, flux_ben)
             CASE ( 'wind_speed' )  ; column(av)%cell_sheet => wnd
             CASE ( 'par_sf' )      ; column(av)%cell_sheet => I_0
             CASE ( 'taub' )        ; column(av)%cell_sheet => bottom_stress
-            CASE ( 'col_depth' )   ; column(av)%cell_sheet => depth(1)
+            CASE ( 'col_depth' )   ; column(av)%cell_sheet => col_depth
             CASE ( 'layer_area' )  ; column(av)%cell => area(:)
             CASE ( 'rain' )        ; column(av)%cell_sheet => precip
             CASE ( 'air_temp' )    ; column(av)%cell_sheet => air_temp
@@ -944,6 +945,7 @@ SUBROUTINE aed_do_glm(wlev, pIce) BIND(C, name=_WQ_DO_GLM)
 
    ALLOCATE(flux_pel(MAX(wlev,n_zones),n_vars+n_vars_ben))
 
+   col_depth = z(wlev)
    surf = z(wlev)
    !# re-compute the layer heights and depths
    dz(1) = z(1)
@@ -1128,7 +1130,7 @@ CONTAINS
             CASE ( 'wind_speed' )  ; column_sed(av)%cell_sheet => wnd
             CASE ( 'par_sf' )      ; column_sed(av)%cell_sheet => I_0
             CASE ( 'taub' )        ; column_sed(av)%cell_sheet => bottom_stress
-            CASE ( 'col_depth' )   ; column_sed(av)%cell_sheet => depth(1)
+            CASE ( 'col_depth' )   ; column_sed(av)%cell_sheet => col_depth
             CASE ( 'layer_area' )  ; column_sed(av)%cell => theZones(bot:top)%zarea
             CASE ( 'rain' )        ; column_sed(av)%cell_sheet => precip
             CASE ( 'air_temp' )    ; column_sed(av)%cell_sheet => air_temp
@@ -1178,20 +1180,12 @@ CONTAINS
    !LOCALS
    INTEGER :: lev,zon,av,sv,sd
    TYPE(aed_variable_t),POINTER :: tvar
-   INTEGER, ALLOCATABLE :: layer_map(:)
    !
    !----------------------------------------------------------------------------
    !BEGIN
       DO lev=1, wlev
          CALL aed_initialize(column, lev)
       ENDDO
-
-      !Initialize column
-      ALLOCATE(layer_map(wlev))
-      DO lev=1,wlev
-         layer_map(lev) = 1 + wlev-lev
-      ENDDO
-      CALL aed_initialize_column(column, layer_map)
 
       !# (1) BENTHIC INITIALISATION
       IF ( benthic_mode .GT. 1 ) THEN
