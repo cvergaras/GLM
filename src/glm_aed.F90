@@ -1542,6 +1542,10 @@ SUBROUTINE aed_clean_glm() BIND(C, name=_WQ_CLEAN_GLM)
    IF (ALLOCATED(tss)) DEALLOCATE(tss)
    IF (ALLOCATED(externalid)) DEALLOCATE(externalid)
    IF (ALLOCATED(zexternalid)) DEALLOCATE(zexternalid)
+   IF (ALLOCATED(plot_id_v))  DEALLOCATE(plot_id_v)
+   IF (ALLOCATED(plot_id_sv)) DEALLOCATE(plot_id_sv)
+   IF (ALLOCATED(plot_id_d))  DEALLOCATE(plot_id_d)
+   IF (ALLOCATED(plot_id_sd)) DEALLOCATE(plot_id_sd)
 END SUBROUTINE aed_clean_glm
 !+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
